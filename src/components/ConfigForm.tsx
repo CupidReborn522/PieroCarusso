@@ -18,51 +18,79 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({ config, onConfigChange, 
         });
     };
 
+    const validations = [
+        {
+            check: config.workDays >= 2 * config.restDays,
+            msg: "N debe ser al menos el doble de M (N >= 2*M)"
+        },
+        {
+            check: config.workDays > config.inductionDays + 2,
+            msg: "N debe ser mayor a Inducción + 2"
+        }
+    ];
+
+    const errors = validations.filter(v => !v.check).map(v => v.msg);
+    const isValid = errors.length === 0;
+
     return (
         <div className="config-form">
             <h2>Configuración del Régimen</h2>
-            <div className="form-group">
-                <label>Días de Trabajo (N):</label>
-                <input
-                    type="number"
-                    name="workDays"
-                    value={config.workDays}
-                    onChange={handleChange}
-                    min="1"
-                />
+            <div className="inputs-row">
+                <div className="form-group">
+                    <label>Días de Trabajo (N):</label>
+                    <input
+                        type="number"
+                        name="workDays"
+                        value={config.workDays}
+                        onChange={handleChange}
+                        min="1"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Días de Descanso (M):</label>
+                    <input
+                        type="number"
+                        name="restDays"
+                        value={config.restDays}
+                        onChange={handleChange}
+                        min="1"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Días de Inducción (I):</label>
+                    <input
+                        type="number"
+                        name="inductionDays"
+                        value={config.inductionDays}
+                        onChange={handleChange}
+                        min="0"
+                        max="5"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Total Días a Proyectar:</label>
+                    <input
+                        type="number"
+                        name="totalDays"
+                        value={config.totalDays}
+                        onChange={handleChange}
+                        min="30"
+                    />
+                </div>
             </div>
-            <div className="form-group">
-                <label>Días de Descanso (M):</label>
-                <input
-                    type="number"
-                    name="restDays"
-                    value={config.restDays}
-                    onChange={handleChange}
-                    min="1"
-                />
-            </div>
-            <div className="form-group">
-                <label>Días de Inducción (I):</label>
-                <input
-                    type="number"
-                    name="inductionDays"
-                    value={config.inductionDays}
-                    onChange={handleChange}
-                    min="0"
-                    max="5"
-                />
-            </div>
-            <div className="form-group">
-                <label>Total Días a Proyectar:</label>
-                <input
-                    type="number"
-                    name="totalDays"
-                    value={config.totalDays}
-                    onChange={handleChange}
-                    min="30"
-                />
-            </div>
-            <button className="generate-btn" onClick={onGenerate}>
+
+            {errors.length > 0 && (
+                <div className="validation-errors">
+                    {errors.map((err, i) => <p key={i} className="error-msg">⚠️ {err}</p>)}
+                </div>
+            )}
+
+            <button
+                className="generate-btn"
+                onClick={onGenerate}
+                disabled={!isValid}
+                title={!isValid ? "Corrige los errores para calcular" : ""}
+            >
                 Calcular Cronograma
             </button>
         </div>
