@@ -1,6 +1,7 @@
 
 import React from 'react';
 import type { DayData, DayStatus } from '../utils/scheduleGenerator';
+import { FaBus, FaBook, FaHammer, FaHome, FaBed } from 'react-icons/fa';
 import './ScheduleGrid.css';
 
 interface ScheduleGridProps {
@@ -21,10 +22,7 @@ const getStatusColor = (status: DayStatus) => {
     }
 };
 
-const getStatusLabel = (status: DayStatus) => {
-    if (status === '-') return '';
-    return status;
-};
+
 
 export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
     schedule,
@@ -32,6 +30,8 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
     isEditMode,
     onToggleEditMode
 }) => {
+    const [showIcons, setShowIcons] = React.useState(false);
+
     if (schedule.length === 0) return null;
 
     const supervisors: ('s1' | 's2' | 's3')[] = ['s1', 's2', 's3'];
@@ -43,18 +43,40 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
         }
     };
 
+    const renderCellContent = (status: DayStatus) => {
+        if (status === '-') return '';
+        if (!showIcons) return status;
+
+        switch (status) {
+            case 'S': return <FaBus title="Subida" />;
+            case 'I': return <FaBook title="Inducción" />;
+            case 'P': return <FaHammer title="Perforación" />;
+            case 'B': return <FaHome title="Bajada" />;
+            case 'D': return <FaBed title="Descanso" />;
+            default: return status;
+        }
+    };
+
     return (
         <div className="schedule-grid-container">
             <div className="grid-header">
                 <h3>Cronograma Generado</h3>
-                <button
-                    onClick={onToggleEditMode}
-                    className={`edit-toggle-btn mb-4 ${isEditMode ? 'active' : ''}`}
-                    title="Activar/Desactivar edición manual"
-                >
-                    {isEditMode ? '🔓 Modo Edición Activo' : '🔒 Modo Lectura'}
-                </button>
-                <br />
+                <div className="header-controls">
+                    <button
+                        onClick={() => setShowIcons(!showIcons)}
+                        className={`edit-toggle-btn ${showIcons ? 'active' : ''}`}
+                        title="Alternar entre Iconos y Letras"
+                    >
+                        {showIcons ? '🔤 Ver Letras' : '🎨 Ver Iconos'}
+                    </button>
+                    <button
+                        onClick={onToggleEditMode}
+                        className={`edit-toggle-btn ${isEditMode ? 'active' : ''}`}
+                        title="Activar/Desactivar edición manual"
+                    >
+                        {isEditMode ? '🔓 Modo Edición' : '🔒 Modo Lectura'}
+                    </button>
+                </div>
             </div>
 
             <div className="schedule-table-wrapper">
@@ -83,7 +105,9 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
                                                 {statuses.map(s => <option key={s} value={s}>{s}</option>)}
                                             </select>
                                         ) : (
-                                            getStatusLabel(d[sup] as DayStatus)
+                                            <span className="cell-content">
+                                                {renderCellContent(d[sup] as DayStatus)}
+                                            </span>
                                         )}
                                     </td>
                                 ))}
@@ -101,11 +125,11 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
                 </table>
             </div>
             <div className="legend">
-                <div className="legend-item"><span style={{ background: 'var(--color-subida)' }}></span> Subida (S)</div>
-                <div className="legend-item"><span style={{ background: 'var(--color-induccion)' }}></span> Inducción (I)</div>
-                <div className="legend-item"><span style={{ background: 'var(--color-perforacion)' }}></span> Perforación (P)</div>
-                <div className="legend-item"><span style={{ background: 'var(--color-bajada)' }}></span> Bajada (B)</div>
-                <div className="legend-item"><span style={{ background: 'var(--color-descanso)' }}></span> Descanso (D)</div>
+                <div className="legend-item"><span style={{ background: 'var(--color-subida)' }}></span> <FaBus /> Subida (S)</div>
+                <div className="legend-item"><span style={{ background: 'var(--color-induccion)' }}></span> <FaBook /> Inducción (I)</div>
+                <div className="legend-item"><span style={{ background: 'var(--color-perforacion)' }}></span> <FaHammer /> Perforación (P)</div>
+                <div className="legend-item"><span style={{ background: 'var(--color-bajada)' }}></span> <FaHome /> Bajada (B)</div>
+                <div className="legend-item"><span style={{ background: 'var(--color-descanso)' }}></span> <FaBed /> Descanso (D)</div>
             </div>
         </div>
     );
