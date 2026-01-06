@@ -6,6 +6,12 @@
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1rem;
+  }
+}
+
 .app-header p {
   color: #ccc;
   margin-bottom: 2rem;
