@@ -54,10 +54,20 @@ export const generateSchedule = (params: ScheduleParams): DayData[] => {
     const CycleDay = i % s1CycleLength;
     let status: DayStatus = '-';
 
+    const cycleCount = Math.floor(i / s1CycleLength);
+
     if (CycleDay < s1ActiveLength) {
       if (CycleDay === 0) status = 'S';
-      else if (CycleDay <= inductionDays) status = 'I';
-      else status = 'P';
+      else if (cycleCount === 0 && CycleDay <= inductionDays) {
+        // Induction only in the FIRST cycle (Project Start)
+        status = 'I';
+      }
+      else {
+        // For subsequent cycles, or after induction in first cycle
+        // If subsequent cycle: S (Day 0) -> P (Day 1..N)
+        // If first cycle: S -> I...I -> P
+        status = 'P';
+      }
     } else {
       // Rest Phase
       if (CycleDay === s1ActiveLength) status = 'B';
@@ -139,8 +149,13 @@ export const generateSchedule = (params: ScheduleParams): DayData[] => {
       // Write S and I
       if (startS >= 0) setStatus(idleSup, startS, 'S');
       for (let k = 1; k <= inductionDays; k++) {
+        // Ensure strictly 'inductionDays' count
         setStatus(idleSup, startS + k, 'I');
       }
+
+      // Explicitly mark P start after induction finishes
+      // This prevents 'I' drifting into 'P' territory unintentionally
+      setStatus(idleSup, startS + inductionDays + 1, 'P');
 
       // From day i onwards, this supporter is P (handled by filler loop below)
     }
