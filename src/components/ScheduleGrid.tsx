@@ -49,11 +49,12 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
                 <h3>Cronograma Generado</h3>
                 <button
                     onClick={onToggleEditMode}
-                    className={`edit-toggle-btn ${isEditMode ? 'active' : ''}`}
+                    className={`edit-toggle-btn mb-4 ${isEditMode ? 'active' : ''}`}
                     title="Activar/Desactivar edición manual"
                 >
                     {isEditMode ? '🔓 Modo Edición Activo' : '🔒 Modo Lectura'}
                 </button>
+                <br />
             </div>
 
             <div className="schedule-table-wrapper">
