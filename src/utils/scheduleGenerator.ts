@@ -198,24 +198,25 @@ export const generateSchedule = (params: ScheduleParams): DayData[] => {
     });
   }
 
-  // Final Pass: Calculate Counts and Errors
-  for (let i = 0; i < totalDays; i++) {
-    const day = schedule[i];
+  return validateSchedule(schedule);
+};
+
+export const validateSchedule = (schedule: DayData[]): DayData[] => {
+  const newSchedule = [...schedule];
+  for (let i = 0; i < newSchedule.length; i++) {
+    const day = newSchedule[i];
+    // Reset errors and count for re-validation
+    day.errors = [];
+
     const pCount = [day.s1, day.s2, day.s3].filter(s => s === 'P').length;
     day.drillCount = pCount;
 
     // Validation
     // Error 3P
     if (pCount === 3) day.errors.push('3 P activas');
-    // Error 1P (Only if S3 has entered? Or general?)
-    // Prompt: "NUNCA debe haber solo 1 supervisor perforando (una vez que S3 entro)"
-    // Identify if S3 entered.
-    const s3Entered = schedule.slice(0, i + 1).some(d => d.s3 !== '-');
+    // Error 1P
+    const s3Entered = newSchedule.slice(0, i + 1).some(d => d.s3 !== '-');
     if (pCount === 1 && s3Entered) day.errors.push('Solo 1 P');
-
-    // Error Patterns? S-S, S-B.
-    // Harder to check here without history, but feasible.
   }
-
-  return schedule;
+  return newSchedule;
 };

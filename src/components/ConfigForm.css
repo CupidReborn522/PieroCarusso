@@ -66,18 +66,19 @@
     width: 100%;
 }
 
-.validation-errors {
+.validation-warnings {
     width: 100%;
     text-align: center;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(234, 179, 8, 0.1);
+    /* Yellow/Orange tint */
+    border: 1px solid rgba(234, 179, 8, 0.3);
     border-radius: 8px;
     padding: 0.5rem;
     margin-top: 1rem;
 }
 
-.error-msg {
-    color: #ffcccc;
+.warning-msg {
+    color: #ffd700;
     font-size: 0.9rem;
     margin: 0.2rem 0;
 }

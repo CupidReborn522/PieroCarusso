@@ -30,7 +30,6 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({ config, onConfigChange, 
     ];
 
     const errors = validations.filter(v => !v.check).map(v => v.msg);
-    const isValid = errors.length === 0;
 
     return (
         <div className="config-form">
@@ -80,16 +79,14 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({ config, onConfigChange, 
             </div>
 
             {errors.length > 0 && (
-                <div className="validation-errors">
-                    {errors.map((err, i) => <p key={i} className="error-msg">⚠️ {err}</p>)}
+                <div className="validation-warnings">
+                    {errors.map((err, i) => <p key={i} className="warning-msg">⚠️ Nota: {err}</p>)}
                 </div>
             )}
 
             <button
                 className="generate-btn"
                 onClick={onGenerate}
-                disabled={!isValid}
-                title={!isValid ? "Corrige los errores para calcular" : ""}
             >
                 Calcular Cronograma
             </button>

@@ -5,6 +5,9 @@ import './ScheduleGrid.css';
 
 interface ScheduleGridProps {
     schedule: DayData[];
+    onCellEdit?: (dayIndex: number, supervisor: 's1' | 's2' | 's3', newStatus: DayStatus) => void;
+    isEditMode: boolean;
+    onToggleEditMode: () => void;
 }
 
 const getStatusColor = (status: DayStatus) => {
@@ -23,12 +26,36 @@ const getStatusLabel = (status: DayStatus) => {
     return status;
 };
 
-export const ScheduleGrid: React.FC<ScheduleGridProps> = ({ schedule }) => {
+export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
+    schedule,
+    onCellEdit,
+    isEditMode,
+    onToggleEditMode
+}) => {
     if (schedule.length === 0) return null;
+
+    const supervisors: ('s1' | 's2' | 's3')[] = ['s1', 's2', 's3'];
+    const statuses: DayStatus[] = ['S', 'I', 'P', 'B', 'D', '-'];
+
+    const handleStatusChange = (dayIndex: number, sup: 's1' | 's2' | 's3', val: string) => {
+        if (onCellEdit) {
+            onCellEdit(dayIndex, sup, val as DayStatus);
+        }
+    };
 
     return (
         <div className="schedule-grid-container">
-            <h3>Cronograma Generado</h3>
+            <div className="grid-header">
+                <h3>Cronograma Generado</h3>
+                <button
+                    onClick={onToggleEditMode}
+                    className={`edit-toggle-btn ${isEditMode ? 'active' : ''}`}
+                    title="Activar/Desactivar edición manual"
+                >
+                    {isEditMode ? '🔓 Modo Edición Activo' : '🔒 Modo Lectura'}
+                </button>
+            </div>
+
             <div className="schedule-table-wrapper">
                 <table className="schedule-table">
                     <thead>
@@ -40,30 +67,27 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({ schedule }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="fixed-col">S1</td>
-                            {schedule.map(d => (
-                                <td key={d.dayIndex} style={{ backgroundColor: getStatusColor(d.s1) }}>
-                                    {getStatusLabel(d.s1)}
-                                </td>
-                            ))}
-                        </tr>
-                        <tr>
-                            <td className="fixed-col">S2</td>
-                            {schedule.map(d => (
-                                <td key={d.dayIndex} style={{ backgroundColor: getStatusColor(d.s2) }}>
-                                    {getStatusLabel(d.s2)}
-                                </td>
-                            ))}
-                        </tr>
-                        <tr>
-                            <td className="fixed-col">S3</td>
-                            {schedule.map(d => (
-                                <td key={d.dayIndex} style={{ backgroundColor: getStatusColor(d.s3) }}>
-                                    {getStatusLabel(d.s3)}
-                                </td>
-                            ))}
-                        </tr>
+                        {supervisors.map(sup => (
+                            <tr key={sup}>
+                                <td className="fixed-col">{sup.toUpperCase()}</td>
+                                {schedule.map(d => (
+                                    <td key={d.dayIndex} style={{ backgroundColor: isEditMode ? 'transparent' : getStatusColor(d[sup] as DayStatus) }}>
+                                        {isEditMode ? (
+                                            <select
+                                                value={d[sup] as string}
+                                                onChange={(e) => handleStatusChange(d.dayIndex, sup, e.target.value)}
+                                                className="status-select"
+                                                style={{ backgroundColor: getStatusColor(d[sup] as DayStatus) }}
+                                            >
+                                                {statuses.map(s => <option key={s} value={s}>{s}</option>)}
+                                            </select>
+                                        ) : (
+                                            getStatusLabel(d[sup] as DayStatus)
+                                        )}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
                         <tr className="count-row">
                             <td className="fixed-col"># Drill</td>
                             {schedule.map(d => (
