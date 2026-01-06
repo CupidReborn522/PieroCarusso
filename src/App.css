@@ -1,0 +1,12 @@
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.app-header p {
+  color: #ccc;
+  margin-bottom: 2rem;
+}

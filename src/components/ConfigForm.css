@@ -1,0 +1,52 @@
+.config-form {
+    background: var(--color-card);
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: flex-end;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.config-form h2 {
+    width: 100%;
+    margin-top: 0;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.form-group input {
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #333;
+    color: white;
+    width: 100px;
+}
+
+.generate-btn {
+    background-color: var(--color-subida);
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+
+.generate-btn:hover {
+    background-color: #2563eb;
+    border-color: transparent;
+}

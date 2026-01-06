@@ -1,0 +1,68 @@
+.schedule-grid-container {
+    background: var(--color-card);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.schedule-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.schedule-table th,
+.schedule-table td {
+    padding: 0.5rem;
+    border: 1px solid #444;
+    text-align: center;
+    min-width: 30px;
+}
+
+.fixed-col {
+    position: sticky;
+    left: 0;
+    background: var(--color-card);
+    z-index: 10;
+    font-weight: bold;
+    border-right: 2px solid #555;
+}
+
+.count-row td {
+    font-weight: bold;
+    background: #333;
+}
+
+.error-cell {
+    background: rgba(239, 68, 68, 0.4) !important;
+    color: #ffcccc;
+    border: 2px solid var(--color-bajada);
+}
+
+.legend {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-item span {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: inline-block;
+}
